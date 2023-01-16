@@ -277,7 +277,24 @@
       "roundness": {
         "type": 2
       },
-      "boundElements": [],
+      "boundElements": [
+        {
+          "id": "iwH1dg1FhPl9N9QujPBQO",
+          "type": "arrow"
+        },
+        {
+          "id": "TD3z6ZlbxcEMADY1gPhB7",
+          "type": "arrow"
+        },
+        {
+          "id": "qBBRhz5l85GmVZwtJUHnM",
+          "type": "arrow"
+        },
+        {
+          "type": "text",
+          "id": "dikQd2vUsrTY2ptGXtKOh"
+        }
+      ],
       "updated": 1673889365766,
       "link": null,
       "locked": false
@@ -602,7 +619,12 @@
       "roundness": {
         "type": 3
       },
-      "boundElements": [],
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "r6WDJfUSpd-T5P2F9arM0"
+        }
+      ],
       "updated": 1673889373574,
       "link": null,
       "locked": false
