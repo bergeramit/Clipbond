@@ -1,6 +1,5 @@
 use std::io::{Write, Read};
-use std::net::{Ipv4Addr, SocketAddr};
-use std::net::{TcpListener, TcpStream};
+use std::net::{TcpStream};
 
 pub struct Endpoint {
     stream: TcpStream,

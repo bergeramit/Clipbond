@@ -9,9 +9,9 @@ use clap::Parser;
 
 fn connect_server() -> Endpoint {
     let listener = TcpListener::bind((Ipv4Addr::LOCALHOST, 0)).unwrap();
-    let binded_addr = listener.local_addr().unwrap();
-    println!("Listening on {:?}...", binded_addr);
-    println!("On peers machine run: clipbond connect {:?} {:?}", binded_addr.ip(), binded_addr.port());
+    let bound_addr = listener.local_addr().unwrap();
+    println!("Listening on {:?}...", bound_addr);
+    println!("On peers machine run: clipbond connect {:?} {:?}", bound_addr.ip(), bound_addr.port());
     let (stream, addr) = listener.accept().expect("No client found!");
     println!("Accepted connection from: {:?}", addr);
     Endpoint::new(stream)
