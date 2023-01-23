@@ -10,10 +10,10 @@ pub struct Args {
 #[derive(clap::Subcommand)]
 pub enum Action {
     Connect {
-        #[arg(short('r'), long, help="Your Server's IP ( this is your peer's ip)")]
+        #[arg(name="SERVER_IP", help="Your Server's IP ( this is your peer's ip)")]
         server_ip: Ipv4Addr,
 
-        #[arg(short('p'), long, help="The port your peer is listening on for the connection ( this is your peer's listen port)")]
+        #[arg(name="SERVER_PORT", help="The port your peer is listening on for the connection ( this is your peer's listen port)")]
         server_port: u16,
     },
     Server
