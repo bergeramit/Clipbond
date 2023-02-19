@@ -1,4 +1,5 @@
 pub mod endpoint;
+pub mod clipboard_session;
 
 #[cfg(test)]
 mod tests {
@@ -10,12 +11,12 @@ mod tests {
 
     fn _server_endpoint(listener: TcpListener) -> Endpoint {
         let (stream, _) = listener.accept().expect("No client found!");
-        Endpoint::new(stream)
+        Endpoint::new_server(stream)
     }
 
     fn _client_endpoint(server_addr: SocketAddr) -> Endpoint {
         let stream = TcpStream::connect(server_addr).expect("Couldn't connect to server");
-        Endpoint::new(stream)
+        Endpoint::new_client(stream)
     }
 
     #[test]
