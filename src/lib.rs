@@ -1,9 +1,8 @@
-pub mod endpoint;
-pub mod clipboard_session;
+pub mod session;
 
 #[cfg(test)]
 mod tests {
-    use crate::endpoint::{Endpoint, ConnectionInfo};
+    use crate::session::endpoint::{Endpoint, ConnectionInfo};
     use std::net::{Ipv4Addr};
     use std::{thread, time};
 
