@@ -9,6 +9,7 @@ use cmd_config::{Action, Args};
 use clap::Parser;
 
 fn main() {
+    env_logger::init();
     let args = Args::parse();
     let endpoint = match args.action {
         Action::Server => {Endpoint::new(ConnectionInfo::Server { listening_ip: Ipv4Addr::LOCALHOST, listening_port: 0 })},
@@ -19,4 +20,6 @@ fn main() {
     };
     let mut session = ClipboardSession::new(endpoint);
     session.setup();
+    session.run();
+    session.teardown();
 }
