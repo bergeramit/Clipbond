@@ -1,9 +1,8 @@
 mod cmd_config;
-mod endpoint;
-mod clipboard_session;
+mod session;
 
-use endpoint::{Endpoint, ConnectionInfo};
-use clipboard_session::ClipboardSession;
+use session::endpoint::{ConnectionInfo};
+use session::{Session};
 use std::net::{Ipv4Addr};
 use cmd_config::{Action, Args};
 use clap::Parser;
@@ -11,14 +10,14 @@ use clap::Parser;
 fn main() {
     env_logger::init();
     let args = Args::parse();
-    let endpoint = match args.action {
-        Action::Server => {Endpoint::new(ConnectionInfo::Server { listening_ip: Ipv4Addr::LOCALHOST, listening_port: 0 })},
+    let connection_info = match args.action {
+        Action::Server => {ConnectionInfo::Server { listening_ip: Ipv4Addr::LOCALHOST, listening_port: 0 }},
         Action::Connect {
             server_ip,
             server_port
-        } => {Endpoint::new(ConnectionInfo::Client { server_ip, server_port })},
+        } => {ConnectionInfo::Client { server_ip, server_port }},
     };
-    let mut session = ClipboardSession::new(endpoint);
+    let mut session = Session::new(connection_info);
     session.setup();
     session.run();
     session.teardown();
