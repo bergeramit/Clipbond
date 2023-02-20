@@ -10,13 +10,14 @@ mod tests {
         let server_ip = Ipv4Addr::LOCALHOST;
         let server_port = 18344;
 
-        let clone_server_ip = server_ip;
-        let clone_server_port = server_port;
-
-        let server_handle = thread::spawn( move || {
-            let mut endpoint = Endpoint::new(ConnectionInfo::Server { listening_ip: clone_server_ip, listening_port: clone_server_port });
-            endpoint.setup();
-            endpoint.write(&[1, 3, 3, 7]).unwrap();
+        let server_handle = thread::spawn( { 
+            let clone_server_ip = server_ip;
+            let clone_server_port = server_port;
+            move || {
+                let mut endpoint = Endpoint::new(ConnectionInfo::Server { listening_ip: clone_server_ip, listening_port: clone_server_port });
+                endpoint.setup();
+                endpoint.write(&[1, 3, 3, 7]).unwrap();
+            }
         });
 
         let mut endpoint = Endpoint::new(ConnectionInfo::Client { server_ip, server_port });
@@ -33,17 +34,18 @@ mod tests {
         let server_ip = Ipv4Addr::LOCALHOST;
         let server_port = 18312;
 
-        let clone_server_ip = server_ip;
-        let clone_server_port = server_port;
-
-        let client_handle = thread::spawn(move || {
-            let mut endpoint = Endpoint::new(ConnectionInfo::Client { server_ip, server_port });
-            thread::sleep(time::Duration::from_millis(100));
-            endpoint.setup();
-            endpoint.write(&[1, 3, 3, 7]).unwrap();
+        let client_handle = thread::spawn({
+            let clone_server_ip = server_ip;
+            let clone_server_port = server_port;
+            move || {
+                let mut endpoint = Endpoint::new(ConnectionInfo::Client { server_ip: clone_server_ip, server_port: clone_server_port });
+                thread::sleep(time::Duration::from_millis(100));
+                endpoint.setup();
+                endpoint.write(&[1, 3, 3, 7]).unwrap();
+            }
         });
 
-        let mut endpoint = Endpoint::new(ConnectionInfo::Server { listening_ip: clone_server_ip, listening_port: clone_server_port });
+        let mut endpoint = Endpoint::new(ConnectionInfo::Server { listening_ip: server_ip, listening_port: server_port });
         endpoint.setup();
         client_handle.join().unwrap();
         endpoint.read(&mut rec_buf).unwrap();
