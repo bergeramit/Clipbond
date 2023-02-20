@@ -7,6 +7,7 @@ pub struct Args {
     #[command(subcommand)]
     pub action: Action
 }
+
 #[derive(clap::Subcommand)]
 pub enum Action {
     Connect {
