@@ -1,4 +1,4 @@
-use cli_clipboard::{ClipboardContext, ClipboardProvider};
+use cli_clipboard::{ClipboardProvider};
 
 pub struct ClipboardManager {
     #[cfg(any(target_os = "macos", target_os = "linux"))]
@@ -12,7 +12,7 @@ impl ClipboardManager {
     pub fn new() -> Self {
         #[cfg(any(target_os = "macos", target_os = "linux"))]
         return ClipboardManager {
-            context: ClipboardContext::new().unwrap()
+            context: cli_clipboard::linux_clipboard::LinuxClipboardContext::new().unwrap()
         };
 
         #[cfg(target_os = "windows")]
