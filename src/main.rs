@@ -6,6 +6,8 @@ use session::{Session};
 use std::net::{Ipv4Addr};
 use cmd_config::{Action, Args};
 use clap::Parser;
+use tokio;
+
 
 fn main() {
     env_logger::init();
@@ -19,6 +21,12 @@ fn main() {
     };
     let mut session = Session::new(connection_info);
     session.setup();
-    session.run();
+    tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .unwrap()
+        .block_on(async {
+            session.run().await;
+        });
     session.teardown();
 }

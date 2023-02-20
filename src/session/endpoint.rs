@@ -2,6 +2,8 @@ use std::io::{Write, Read};
 use std::net::{Ipv4Addr};
 use std::net::{TcpListener, TcpStream, Shutdown};
 
+pub const MAX_MESSAGE_BUFFER: usize = 1024;
+
 pub enum ConnectionInfo {
     Server {
         listening_ip: Ipv4Addr,
@@ -11,6 +13,11 @@ pub enum ConnectionInfo {
         server_ip: Ipv4Addr,
         server_port: u16
     }
+}
+
+pub struct Message {
+    pub buf: [u8; MAX_MESSAGE_BUFFER],
+    pub size: usize
 }
 
 pub struct Endpoint {
