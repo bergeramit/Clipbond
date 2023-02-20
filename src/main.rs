@@ -1,7 +1,7 @@
 mod cmd_config;
 mod session;
 
-use session::endpoint::{Endpoint, ConnectionInfo};
+use session::endpoint::{ConnectionInfo};
 use session::{Session};
 use std::net::{Ipv4Addr};
 use cmd_config::{Action, Args};

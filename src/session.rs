@@ -1,6 +1,5 @@
 pub mod endpoint;
-
-mod clipboard_manager;
+pub mod clipboard_manager;
 
 use endpoint::{Endpoint, ConnectionInfo};
 use clipboard_manager::ClipboardManager;
