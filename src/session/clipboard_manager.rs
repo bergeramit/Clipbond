@@ -5,7 +5,7 @@ pub struct ClipboardManager {
     context: cli_clipboard::linux_clipboard::LinuxClipboardContext,
 
     #[cfg(target_os = "windows")]
-    context: cli_clipboard::wayland_clipboard::WaylandClipboardContext,
+    context: cli_clipboard::windows_clipboard::WindowsClipboardContext,
 }
 
 impl ClipboardManager {
@@ -17,7 +17,7 @@ impl ClipboardManager {
 
         #[cfg(target_os = "windows")]
         return ClipboardManager {
-            context: cli_clipboard::wayland_clipboard::WaylandClipboardContext::new().unwrap()
+            context: cli_clipboard::windows_clipboard::WindowsClipboardContext::new().unwrap()
         };
     }
 
