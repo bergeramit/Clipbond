@@ -4,13 +4,19 @@ pub mod clipboard_manager;
 use endpoint::{Endpoint, ConnectionInfo, Message, MAX_MESSAGE_BUFFER};
 use clipboard_manager::ClipboardManager;
 use log::{debug, info};
-use std::str;
+use std::{str, io};
 use futures::select;
 use futures::future::FutureExt;
 
 pub struct Session {
     endpoint: Endpoint,
     clipboard_manager: ClipboardManager
+}
+
+pub async fn monitor_user() -> String {
+    let mut buf = String::new();
+    io::stdin().read_line(&mut buf).unwrap();
+    buf
 }
 
 impl Session {
@@ -47,6 +53,9 @@ impl Session {
                     let received_buf = &msg.buf[0..msg.size];
                     println!("Received from socket: {:?}", received_buf);
                     self.clipboard_manager.set_content(String::from(str::from_utf8(received_buf).unwrap()));
+                }
+                user_msg = monitor_user().fuse() => {
+                    println!("User input: {:?}", user_msg);
                 }
             }
         }
