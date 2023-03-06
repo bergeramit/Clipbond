@@ -1,14 +1,14 @@
-use cli_clipboard::{ClipboardProvider, ClipboardContext};
+use cli_clipboard::{ClipboardContext, ClipboardProvider};
 
 pub struct ClipboardManager {
-    context: ClipboardContext
+    context: ClipboardContext,
 }
 
 impl ClipboardManager {
     pub fn new() -> Self {
         return Self {
-            context: ClipboardContext::new().unwrap()
-        }
+            context: ClipboardContext::new().unwrap(),
+        };
     }
 
     pub fn set_content(&mut self, content: String) {
