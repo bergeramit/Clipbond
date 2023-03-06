@@ -1,7 +1,7 @@
 use std::error::Error;
 
-use super::common;
-use common::KeyboardListenerProvider;
+use super::keyboard_listener_provider;
+use keyboard_listener_provider::KeyboardListenerProvider;
 
 pub struct NopKeyboardListener {}
 
@@ -11,17 +11,15 @@ impl KeyboardListenerProvider for NopKeyboardListener {
     }
 
     fn start(&mut self) -> Result<&str, Box<dyn Error>> {
-        println!(
+        panic!(
             "Attempting to set a keyboard listener, which hasn't yet been \
-                  implemented on this platform."
-        );
-        Ok("")
+        implemented on this platform.",
+        )
     }
     fn stop(&mut self) -> Result<&str, Box<dyn Error>> {
-        println!(
+        panic!(
             "Attempting to stop a keyboard listener, which hasn't yet been \
-                  implemented on this platform."
-        );
-        Ok("")
+                  implemented on this platform.",
+        )
     }
 }

@@ -13,11 +13,11 @@ mod tests {
         println!("callback was called");
     }
 
-    fn press_key() {
+    fn press_key(modifier: Key) {
         let mut enigo = Enigo::new();
-        enigo.key_down(Key::Meta);
+        enigo.key_down(modifier);
         enigo.key_click(Key::Layout('c'));
-        enigo.key_up(Key::Meta);
+        enigo.key_up(modifier);
     }
 
     #[test]
@@ -27,7 +27,7 @@ mod tests {
         }
         let mut listener = KeyboardListener::new(callback).unwrap();
         listener.start().unwrap();
-        press_key();
+        press_key(Key::Meta);
         listener.stop().unwrap();
         unsafe {
             assert_eq!(INDICATOR, true);
@@ -41,13 +41,13 @@ mod tests {
         }
         let mut listener = KeyboardListener::new(callback).unwrap();
         listener.start().unwrap();
-        press_key();
+        press_key(Key::Meta);
         listener.stop().unwrap();
         unsafe {
             assert_eq!(INDICATOR, true);
         }
 
-        press_key();
+        press_key(Key::Meta);
         unsafe {
             assert_eq!(INDICATOR, true);
         }
