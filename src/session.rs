@@ -50,6 +50,7 @@ impl Session {
         let mut buf = String::new();
         io::stdin().read_line(&mut buf).unwrap();
         info!("User input: {:?}", buf);
+        self.clipboard_manager.set_content(buf);
     }
 
     pub fn run(&mut self) {
@@ -59,17 +60,17 @@ impl Session {
         }
 
         let mut read_fd_set = nix::sys::select::FdSet::new();
-
         let stdin_fd = 0;
         let endpoint_fd = self.endpoint.get_fd();
+
         read_fd_set.insert(stdin_fd);
         read_fd_set.insert(endpoint_fd);
 
         loop {
-            let mut read_fds = read_fd_set.clone();
+            let mut out_read_fds = read_fd_set.clone();
             match nix::sys::select::select(
                 Some(endpoint_fd + 1),
-                &mut read_fds,
+                &mut out_read_fds,
                 None,
                 None,
                 None,
@@ -79,10 +80,10 @@ impl Session {
                     info!("Closing Session");
                     return
                 }
-                if read_fds.contains(endpoint_fd) {
+                if out_read_fds.contains(endpoint_fd) {
                     self.handle_endpoint();
                 }
-                if read_fds.contains(stdin_fd) {
+                if out_read_fds.contains(stdin_fd) {
                     self.handle_stdin();
                 }
             },
