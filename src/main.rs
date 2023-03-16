@@ -21,12 +21,6 @@ fn main() {
     };
     let mut session = Session::new(connection_info);
     session.setup();
-    tokio::runtime::Builder::new_multi_thread()
-        .enable_all()
-        .build()
-        .unwrap()
-        .block_on(async {
-            session.run().await;
-        });
+    session.run();
     session.teardown();
 }
