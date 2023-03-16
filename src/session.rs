@@ -1,7 +1,7 @@
 pub mod endpoint;
 pub mod clipboard_manager;
 
-use endpoint::{Endpoint, ConnectionInfo, Message, MAX_MESSAGE_BUFFER};
+use endpoint::{Endpoint, ConnectionInfo, MAX_MESSAGE_BUFFER};
 use clipboard_manager::ClipboardManager;
 use log::{debug, info};
 use std::{str, io};
@@ -32,7 +32,6 @@ impl Session {
 
     pub fn handle_endpoint(&mut self) {
         let mut buf = [0; MAX_MESSAGE_BUFFER];
-        //let size: usize;
         match self.endpoint.read(&mut buf) {
             Err(e) => {
                 match e.kind() {
@@ -41,7 +40,7 @@ impl Session {
                 }
             },
             Ok(arrived_size) => {
-                println!("Received from socket: {:?}", &buf[0..arrived_size]);
+                info!("Received from socket: {:?}", &buf[0..arrived_size]);
                 self.clipboard_manager.set_content(String::from(str::from_utf8(&buf[0..arrived_size]).unwrap()));
             },
         };        
@@ -50,7 +49,7 @@ impl Session {
     pub fn handle_stdin(&mut self) {
         let mut buf = String::new();
         io::stdin().read_line(&mut buf).unwrap();
-        println!("User input: {:?}", buf);
+        info!("User input: {:?}", buf);
     }
 
     pub fn run(&mut self) {
@@ -77,7 +76,7 @@ impl Session {
             ) {
             Ok(num_fds_ready) => {
                 if num_fds_ready == 0 {
-                    println!("Closing Session");
+                    info!("Closing Session");
                     return
                 }
                 if read_fds.contains(endpoint_fd) {

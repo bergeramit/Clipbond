@@ -6,7 +6,6 @@ use session::{Session};
 use std::net::{Ipv4Addr};
 use cmd_config::{Action, Args};
 use clap::Parser;
-use tokio;
 
 
 fn main() {
