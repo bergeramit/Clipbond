@@ -85,11 +85,11 @@ impl Session {
                 None,
                 None,
             ) {
-                Ok(num_fds_ready) => {
-                    if num_fds_ready == 0 {
-                        info!("Closing Session...");
-                        break;
-                    }
+                Ok(num_fds_ready) if num_fds_ready == 0 => {
+                    info!("Closing Session...");
+                    break;
+                 },
+                Ok(num_fds_ready) if num_fds_ready > 0 => {
                     self.dispatch_read_handlers(ready_read_fds);
                 },
                 _ => {
