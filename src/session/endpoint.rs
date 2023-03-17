@@ -66,13 +66,6 @@ impl Endpoint {
         self.stream.as_ref().unwrap().read(buf)
     }
 
-    pub fn is_client(&self) -> bool {
-        match self.metadata {
-            ConnectionInfo::Client { .. } => { true },
-            _ => { false }
-        }
-    }
-
     pub fn get_fd(&self) -> RawFd {
         self.stream.as_ref().unwrap().as_raw_fd()
     }
