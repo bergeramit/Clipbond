@@ -1,6 +1,12 @@
 use std::io::{Write, Read};
 use std::net::{Ipv4Addr};
+use std::time::Duration;
+use std::os::fd::{RawFd, AsRawFd};
+use log::info;
 use std::net::{TcpListener, TcpStream, Shutdown};
+
+pub const MAX_MESSAGE_BUFFER: usize = 1024;
+const STREAM_TIMEOUT_MS: u64 = 100;
 
 pub enum ConnectionInfo {
     Server {
@@ -31,16 +37,18 @@ impl Endpoint {
             ConnectionInfo::Server { listening_ip, listening_port } => {
                 let listener = TcpListener::bind((listening_ip, listening_port)).unwrap();
                 let bound_addr = listener.local_addr().unwrap();
-                println!("Listening on {:?}...", bound_addr);
-                println!("On peers machine run: clipbond connect {:?} {:?}", bound_addr.ip(), bound_addr.port());
+                info!("Listening on {:?}...", bound_addr);
+                info!("On peers machine run: clipbond connect {:?} {:?}", bound_addr.ip(), bound_addr.port());
                 let (stream, addr) = listener.accept().expect("No client found!");
+                stream.set_read_timeout(Some(Duration::from_millis(STREAM_TIMEOUT_MS))).unwrap();
                 self.stream = Some(stream);
-                println!("Accepted connection from: {:?}", addr);
+                info!("Accepted connection from: {:?}", addr);
             },
             ConnectionInfo::Client { server_ip, server_port } => {
-                println!("Running Client (connect to: {server_ip}:{server_port})...");
+                info!("Running Client (connect to: {server_ip}:{server_port})...");
                 let stream = TcpStream::connect((server_ip, server_port)).expect("Couldn't connect to server");
-                println!("Connected!");
+                info!("Connected!");
+                stream.set_read_timeout(Some(Duration::from_millis(STREAM_TIMEOUT_MS))).unwrap();
                 self.stream = Some(stream);
             }
         }
@@ -56,5 +64,9 @@ impl Endpoint {
 
     pub fn read(&mut self, buf: &mut [u8]) -> Result<usize, std::io::Error> {
         self.stream.as_ref().unwrap().read(buf)
+    }
+
+    pub fn get_fd(&self) -> RawFd {
+        self.stream.as_ref().unwrap().as_raw_fd()
     }
 }
