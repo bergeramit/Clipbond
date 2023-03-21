@@ -7,7 +7,6 @@ use std::net::{Ipv4Addr};
 use cmd_config::{Action, Args};
 use clap::Parser;
 
-
 fn main() {
     env_logger::init();
     let args = Args::parse();
